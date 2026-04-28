@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Allen Gao — ML &amp; Data Science</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#0a0a0f;
+  --fg:#e8e6e1;
+  --accent:#c9a84c;
+  --accent2:#4ca8c9;
+  --muted:#6b6b78;
+  --card:rgba(255,255,255,0.03);
+  --border:rgba(255,255,255,0.06);
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{background:var(--bg);color:var(--fg);font-family:'DM Sans',sans-serif;overflow-x:hidden;line-height:1.7}
+::selection{background:var(--accent);color:var(--bg)}
+
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9999;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+  background-repeat:repeat;background-size:256px 256px;opacity:.5;
+}
+
+/* Nav */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:1.5rem 3rem;display:flex;justify-content:space-between;align-items:center;
+  backdrop-filter:blur(20px);background:rgba(10,10,15,0.7);
+  border-bottom:1px solid var(--border);
+}
+nav .logo{font-family:'Playfair Display',serif;font-size:1.3rem;letter-spacing:2px;color:var(--accent)}
+nav .nav-links{display:flex;gap:2rem}
+nav .nav-links a{color:var(--muted);text-decoration:none;font-size:.85rem;letter-spacing:1.5px;text-transform:uppercase;transition:color .3s}
+nav .nav-links a:hover{color:var(--fg)}
+
+/* Hero */
+.hero{
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  position:relative;padding:6rem 3rem 3rem;
+}
+.hero-bg{position:absolute;inset:0;overflow:hidden}
+.hero-bg .orb{
+  position:absolute;border-radius:50%;filter:blur(120px);opacity:.15;
+  animation:float 20s ease-in-out infinite;
+}
+.hero-bg .orb:nth-child(1){width:600px;height:600px;background:var(--accent);top:-10%;right:-5%}
+.hero-bg .orb:nth-child(2){width:400px;height:400px;background:var(--accent2);bottom:10%;left:-5%;animation-delay:-7s}
+.hero-bg .orb:nth-child(3){width:300px;height:300px;background:#c94c8a;top:40%;left:30%;animation-delay:-14s}
+@keyframes float{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(30px,-40px) scale(1.05)}
+  66%{transform:translate(-20px,30px) scale(0.95)}
+}
+.hero-content{position:relative;z-index:1;max-width:860px;animation:fadeUp 1.2s cubic-bezier(.16,1,.3,1) both}
+@keyframes fadeUp{from{opacity:0;transform:translateY(60px)}to{opacity:1;transform:translateY(0)}}
+
+.hero-tag{
+  display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.72rem;
+  letter-spacing:3px;text-transform:uppercase;color:var(--accent);
+  border:1px solid rgba(201,168,76,.3);padding:.4rem 1rem;border-radius:2px;
+  margin-bottom:2rem;animation:fadeUp 1.2s .2s cubic-bezier(.16,1,.3,1) both;
+}
+.hero h1{
+  font-family:'Playfair Display',serif;font-size:clamp(3rem,7vw,5.5rem);
+  font-weight:700;line-height:1.05;margin-bottom:1.5rem;
+  animation:fadeUp 1.2s .35s cubic-bezier(.16,1,.3,1) both;
+}
+.hero h1 .highlight{color:transparent;-webkit-text-stroke:1.5px var(--accent);font-style:italic}
+.hero p{
+  font-size:1.1rem;color:var(--muted);max-width:620px;line-height:1.9;
+  animation:fadeUp 1.2s .5s cubic-bezier(.16,1,.3,1) both;
+}
+.hero-scroll{
+  position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);
+  display:flex;flex-direction:column;align-items:center;gap:.5rem;
+  color:var(--muted);font-size:.7rem;letter-spacing:2px;text-transform:uppercase;
+  animation:fadeUp 1.2s .8s cubic-bezier(.16,1,.3,1) both;
+}
+.hero-scroll .line{width:1px;height:40px;background:linear-gradient(var(--muted),transparent);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{opacity:.3}50%{opacity:1}}
+
+/* Sections */
+section{padding:6rem 3rem;max-width:1100px;margin:0 auto}
+.section-label{
+  font-family:'JetBrains Mono',monospace;font-size:.7rem;
+  letter-spacing:4px;text-transform:uppercase;color:var(--accent);
+  margin-bottom:1rem;display:flex;align-items:center;gap:1rem;
+}
+.section-label::after{content:'';flex:1;height:1px;background:var(--border)}
+.section-title{font-family:'Playfair Display',serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;margin-bottom:3rem}
+
+/* About */
+.about-grid{display:grid;grid-template-columns:1.2fr .8fr;gap:3rem;align-items:start}
+.about-text{color:var(--muted);font-size:1rem;line-height:2}
+.about-text strong{color:var(--fg);font-weight:500}
+.about-text p+p{margin-top:1.2rem}
+
+.edu-cards{display:flex;flex-direction:column;gap:1rem}
+.edu-card{
+  background:var(--card);border:1px solid var(--border);border-radius:8px;
+  padding:1.4rem 1.6rem;transition:all .4s;
+}
+.edu-card:hover{border-color:rgba(201,168,76,.2);transform:translateY(-3px)}
+.edu-school{font-size:.95rem;font-weight:500;margin-bottom:.2rem}
+.edu-degree{font-size:.82rem;color:var(--accent);font-family:'JetBrains Mono',monospace}
+.edu-date{font-size:.75rem;color:var(--muted);margin-top:.3rem}
+
+/* Project cards */
+.project-cards{display:flex;flex-direction:column;gap:1.5rem}
+.project-card{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:2.5rem;position:relative;overflow:hidden;transition:all .5s;cursor:default;
+}
+.project-card:hover{border-color:rgba(201,168,76,.15);transform:translateX(8px)}
+.project-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:linear-gradient(var(--accent),var(--accent2));border-radius:3px;
+  opacity:0;transition:opacity .4s;
+}
+.project-card:hover::before{opacity:1}
+.project-card h3{font-family:'Playfair Display',serif;font-size:1.35rem;margin-bottom:.5rem}
+.project-card .subtitle{font-size:.82rem;color:var(--accent);margin-bottom:.8rem;font-family:'JetBrains Mono',monospace;letter-spacing:.5px}
+.project-card .tags{display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:1rem}
+.tag{
+  font-family:'JetBrains Mono',monospace;font-size:.63rem;
+  padding:.25rem .65rem;border-radius:3px;letter-spacing:.8px;
+  background:rgba(201,168,76,.08);color:var(--accent);border:1px solid rgba(201,168,76,.15);
+}
+.tag.blue{background:rgba(76,168,201,.08);color:var(--accent2);border-color:rgba(76,168,201,.15)}
+.project-card p{color:var(--muted);font-size:.9rem;line-height:1.85}
+
+/* Experience */
+.exp-block{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:2.5rem;position:relative;overflow:hidden;transition:all .5s;
+}
+.exp-block:hover{border-color:rgba(201,168,76,.15)}
+.exp-header{display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:.5rem;margin-bottom:.5rem}
+.exp-block h3{font-family:'Playfair Display',serif;font-size:1.35rem}
+.exp-date{font-size:.78rem;color:var(--accent);font-family:'JetBrains Mono',monospace;letter-spacing:1px}
+.exp-role{font-size:.9rem;color:var(--accent2);margin-bottom:1rem}
+.exp-highlights{list-style:none;display:flex;flex-direction:column;gap:.7rem}
+.exp-highlights li{color:var(--muted);font-size:.88rem;line-height:1.75;padding-left:1.2rem;position:relative}
+.exp-highlights li::before{content:'›';position:absolute;left:0;color:var(--accent);font-weight:700}
+
+/* Skills */
+.skills-container{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.skill-group{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:1.8rem;transition:all .4s;
+}
+.skill-group:hover{border-color:rgba(201,168,76,.15);transform:translateY(-3px)}
+.skill-group h4{font-size:.88rem;color:var(--accent);margin-bottom:.8rem;font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;text-transform:uppercase}
+.skill-tags{display:flex;flex-wrap:wrap;gap:.4rem}
+.skill-tag{
+  font-size:.78rem;padding:.3rem .7rem;border-radius:4px;
+  background:rgba(255,255,255,.04);color:var(--fg);border:1px solid var(--border);
+  transition:all .3s;
+}
+.skill-tag:hover{border-color:rgba(201,168,76,.25);color:var(--accent)}
+
+/* Learning */
+.learning-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1.5rem}
+.learning-card{
+  background:var(--card);border:1px solid var(--border);border-radius:10px;
+  padding:2rem;transition:all .4s;
+}
+.learning-card:hover{border-color:rgba(76,168,201,.2);transform:translateY(-4px)}
+.learning-card h4{font-size:1rem;margin-bottom:.5rem}
+.learning-card .learning-meta{font-size:.72rem;color:var(--accent2);font-family:'JetBrains Mono',monospace;letter-spacing:1px;margin-bottom:.7rem}
+.learning-card p{color:var(--muted);font-size:.85rem;line-height:1.75}
+
+/* Contact */
+.contact-section{text-align:center;padding:8rem 3rem}
+.contact-section .section-label::after,.contact-section .section-label::before{content:'';flex:1;height:1px;background:var(--border)}
+.contact-section .section-label{justify-content:center}
+.contact-links{display:flex;justify-content:center;gap:2rem;margin-top:2rem;flex-wrap:wrap}
+.contact-link{
+  display:inline-flex;align-items:center;gap:.6rem;
+  padding:.8rem 1.8rem;border:1px solid var(--border);border-radius:6px;
+  color:var(--fg);text-decoration:none;font-size:.85rem;letter-spacing:1px;
+  transition:all .3s;
+}
+.contact-link:hover{border-color:var(--accent);color:var(--accent);transform:translateY(-3px)}
+
+footer{
+  text-align:center;padding:2rem;font-size:.7rem;color:var(--muted);
+  letter-spacing:2px;border-top:1px solid var(--border);
+}
+
+.reveal{opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.16,1,.3,1)}
+.reveal.visible{opacity:1;transform:translateY(0)}
+
+@media(max-width:768px){
+  nav{padding:1rem 1.5rem}
+  nav .nav-links{gap:1rem}
+  nav .nav-links a{font-size:.7rem;letter-spacing:1px}
+  .hero{padding:5rem 1.5rem 3rem}
+  section{padding:4rem 1.5rem}
+  .about-grid{grid-template-columns:1fr}
+  .skills-container{grid-template-columns:1fr}
+  .learning-grid{grid-template-columns:1fr}
+  .contact-links{flex-direction:column;align-items:center}
+  .exp-header{flex-direction:column}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">A.G.</div>
+  <div class="nav-links">
+    <a href="#about">About</a>
+    <a href="#projects">Projects</a>
+    <a href="#experience">Experience</a>
+    <a href="#skills">Skills</a>
+    <a href="#learning">Learning</a>
+    <a href="#contact">Contact</a>
+  </div>
+</nav>
+
+<!-- ===================== HERO ===================== -->
+<section class="hero">
+  <div class="hero-bg">
+    <div class="orb"></div>
+    <div class="orb"></div>
+    <div class="orb"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-tag">Classical ML → Representation Learning → LLMs</div>
+    <h1>Hi, I'm <span class="highlight">Allen Gao</span></h1>
+    <p>I started with classical ML and never stopped expanding. Today my work spans representation learning, computer vision, and large language models. What stays constant is the drive to understand things deeply and the excitement of picking up something entirely new.</p>
+  </div>
+  <div class="hero-scroll">
+    <span>Scroll</span>
+    <div class="line"></div>
+  </div>
+</section>
+
+<!-- ===================== ABOUT ===================== -->
+<section id="about">
+  <div class="section-label">01 — About</div>
+  <div class="section-title">Started with ML, Never Stopped Exploring</div>
+  <div class="about-grid">
+    <div class="about-text">
+      <p>My journey began with <strong>mathematics and classical ML</strong>. An undergraduate degree in Mathematics & Applied Mathematics — covering optimization, real analysis, and functional analysis — taught me to think about problems structurally. Models like XGBoost, logistic regression, and Bayesian methods became my first language, and I've deployed them in production settings from risk control to reliability engineering.</p>
+      <p>But that was just the starting point. The more I learned, the more I wanted to explore. That curiosity pulled me into <strong>representation learning and computer vision</strong> — my main research project, CLeAR-VAE, designs an asymmetric architecture with an elegant contrastive loss to disentangle content and style in images, currently under review at <strong>NeurIPS 2026</strong>.</p>
+      <p>Now I'm pushing further into <strong>large language models</strong>, self-studying through Stanford CS336 and independent deep-dives — not to check a box, but because I genuinely enjoy building understanding from the ground up.</p>
+      <p>The thread that connects all of this isn't any single method — it's the <strong>appetite to go deep on something new</strong>, again and again. I'm looking for <strong>DS / MLE / DA</strong> roles where that kind of range is an asset.</p>
+    </div>
+    <div class="edu-cards">
+      <div class="edu-card reveal">
+        <div class="edu-school">Duke University, School of Medicine</div>
+        <div class="edu-degree">M.S. Biostatistics</div>
+        <div class="edu-date">Expected May 2026</div>
+      </div>
+      <div class="edu-card reveal">
+        <div class="edu-school">Shanghai University</div>
+        <div class="edu-degree">B.S. Mathematics & Applied Mathematics</div>
+        <div class="edu-date">Jun 2024</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.2rem 1.6rem;margin-top:.5rem" class="reveal">
+        <div style="font-size:.75rem;color:var(--accent);font-family:'JetBrains Mono',monospace;letter-spacing:1.5px;margin-bottom:.5rem">COURSEWORK HIGHLIGHTS</div>
+        <div style="font-size:.82rem;color:var(--muted);line-height:1.8">Machine Learning · Deep Learning · Reinforcement Learning · Bayesian Health Data Science · Optimization · Real Analysis · Functional Analysis</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== PROJECTS ===================== -->
+<section id="projects">
+  <div class="section-label">02 — Projects</div>
+  <div class="section-title">Things I've Built</div>
+  <div class="project-cards">
+
+    <div class="project-card reveal">
+      <h3>CLeAR-VAE & CLeAR-LDM</h3>
+      <div class="subtitle">NeurIPS 2026 Submission · Supervised by Prof. Matthew Engelhard</div>
+      <div class="tags">
+        <span class="tag">Asymmetric Architecture</span>
+        <span class="tag">Contrastive Loss</span>
+        <span class="tag">Perceiver-SPADE</span>
+        <span class="tag blue">Disentanglement</span>
+        <span class="tag blue">Latent Diffusion</span>
+      </div>
+      <p>Proposed a weakly-supervised framework for content–style disentanglement built on two key ideas: an <strong>asymmetric Perceiver-SPADE architecture</strong> that gives content and style each their own inductive bias, and an <strong>elegant contrastive learning objective</strong> that drives separation without requiring fine-grained labels. The only method (among 6 baselines) to exceed 90% on both content and style swap accuracy, with a 3M-parameter encoder competitive against 8M-param baselines. Extended to a <strong>latent diffusion model</strong> (CLeAR-LDM) for controllable generation — synthesizing content-preserving images across unseen domains.</p>
+    </div>
+
+    <div class="project-card reveal">
+      <h3>Distributionally Robust Prediction under Shift</h3>
+      <div class="subtitle">Individual Research · Supervised by Prof. Matthew Engelhard</div>
+      <div class="tags">
+        <span class="tag">DRO</span>
+        <span class="tag">Optimal Transport</span>
+        <span class="tag blue">PyTorch</span>
+        <span class="tag blue">Optuna</span>
+      </div>
+      <p>Built LSTM, MLP, and logistic regression models in PyTorch with Optuna hyperparameter tuning to predict outcomes from longitudinal data. Applied <strong>distributionally robust optimization</strong> with <strong>optimal transport</strong> penalties to improve generalization under site-level distribution shifts. Evaluated robustness with AUC, subgroup analysis, and stability metrics under label noise and covariate shift.</p>
+    </div>
+
+    <div class="project-card reveal">
+      <h3>Time-Series Prediction & Robust Backtesting</h3>
+      <div class="subtitle">Individual Project</div>
+      <div class="tags">
+        <span class="tag">Walk-Forward Validation</span>
+        <span class="tag">Monte Carlo</span>
+        <span class="tag blue">Leakage Auditing</span>
+        <span class="tag blue">Risk Control</span>
+      </div>
+      <p>Built a monthly time-series prediction pipeline using Logistic Regression and ElasticNet ensembles with volatility, macro, and momentum signals. Designed strict <strong>walk-forward validation</strong> and <strong>leakage-auditing</strong> procedures, identifying and fixing four sources of look-ahead bias. Developed Monte Carlo stress-testing with Student-t tails and adaptive risk-control modules for stable out-of-sample performance under tail-risk scenarios.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ===================== EXPERIENCE ===================== -->
+<section id="experience">
+  <div class="section-label">03 — Experience</div>
+  <div class="section-title">Where I've Applied It</div>
+
+  <div class="exp-block reveal">
+    <div class="exp-header">
+      <h3>Keeta (Meituan)</h3>
+      <span class="exp-date">May 2025 – Aug 2025</span>
+    </div>
+    <div class="exp-role">Data Science Intern · Risk Control, Financial Services</div>
+    <ul class="exp-highlights">
+      <li>Built end-to-end data pipelines with Hive/Spark and SQL to integrate multi-source data for A/B testing and real-time risk monitoring dashboards.</li>
+      <li>Applied causal inference methods to identify fraud-risk anomalies across user segments, improving monitoring accuracy and supporting policy adjustments.</li>
+      <li>Automated monitoring pipelines with Python and LLM orchestration (LangChain-style), reducing manual workload and operational errors.</li>
+      <li>Performed cold-start strategy research using Decision Trees and XGBoost; optimized credit scorecard segmentation with PyTorch under distribution shifts.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ===================== SKILLS ===================== -->
+<section id="skills">
+  <div class="section-label">04 — Skills</div>
+  <div class="section-title">What I Work With</div>
+  <div class="skills-container">
+    <div class="skill-group reveal">
+      <h4>ML & Statistics</h4>
+      <div class="skill-tags">
+        <span class="skill-tag">PyTorch</span>
+        <span class="skill-tag">Scikit-learn</span>
+        <span class="skill-tag">XGBoost</span>
+        <span class="skill-tag">Optuna</span>
+        <span class="skill-tag">Causal Inference</span>
+        <span class="skill-tag">Bayesian Modeling</span>
+        <span class="skill-tag">DRO</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <h4>Programming</h4>
+      <div class="skill-tags">
+        <span class="skill-tag">Python</span>
+        <span class="skill-tag">SQL</span>
+        <span class="skill-tag">R</span>
+        <span class="skill-tag">C++</span>
+        <span class="skill-tag">MATLAB</span>
+        <span class="skill-tag">VBA</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <h4>Data Engineering</h4>
+      <div class="skill-tags">
+        <span class="skill-tag">Hive</span>
+        <span class="skill-tag">Spark</span>
+        <span class="skill-tag">Pandas</span>
+        <span class="skill-tag">NumPy</span>
+        <span class="skill-tag">Git</span>
+        <span class="skill-tag">Matplotlib</span>
+      </div>
+    </div>
+    <div class="skill-group reveal">
+      <h4>Deep Learning & AI</h4>
+      <div class="skill-tags">
+        <span class="skill-tag">HuggingFace</span>
+        <span class="skill-tag">LangChain</span>
+        <span class="skill-tag">OpenCV</span>
+        <span class="skill-tag">Diffusion Models</span>
+        <span class="skill-tag">VAE</span>
+        <span class="skill-tag">Transformers</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== LEARNING ===================== -->
+<section id="learning">
+  <div class="section-label">05 — Currently Learning</div>
+  <div class="section-title">What I'm Exploring Next</div>
+  <div class="learning-grid">
+    <div class="learning-card reveal">
+      <h4>Stanford CS336 — Language Modeling from Scratch</h4>
+      <div class="learning-meta">Self-Study · Ongoing</div>
+      <p>Working through the full LLM stack end-to-end: BPE tokenization, Transformer architecture, AdamW with cosine scheduling, FlashAttention2, distributed training (DDP, ZeRO Stage 1), and scaling laws (Kaplan vs. Chinchilla).</p>
+    </div>
+    <div class="learning-card reveal">
+      <h4>LLM Internals Deep-Dives</h4>
+      <div class="learning-meta">Independent Study · Ongoing</div>
+      <p>Formal derivations and Socratic-style study of RoPE positional encoding, KV cache optimization, Grouped-Query Attention, and IsoFLOP methodology. Building mathematical intuition, not just API familiarity.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CONTACT ===================== -->
+<section class="contact-section" id="contact">
+  <div class="section-label">06 — Contact</div>
+  <div class="section-title">Let's Connect</div>
+  <p style="color:var(--muted);max-width:520px;margin:0 auto 2rem">Open to DS/MLE/DA opportunities, research collaborations, or any interesting conversation.</p>
+  <div class="contact-links">
+    <a href="mailto:15821356973gao@gmail.com" class="contact-link">✉ Email</a>
+    <a href="https://github.com/AllenGao1109" class="contact-link" target="_blank">⌘ GitHub</a>
+  </div>
+</section>
+
+<footer>
+  © 2026 Allen Gao
+</footer>
+
+<script>
+const reveals=document.querySelectorAll('.reveal');
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach((e,i)=>{if(e.isIntersecting){setTimeout(()=>e.target.classList.add('visible'),i*80);obs.unobserve(e.target)}})
+},{threshold:.1});
+reveals.forEach(el=>obs.observe(el));
+document.querySelectorAll('nav a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{e.preventDefault();document.querySelector(a.getAttribute('href')).scrollIntoView({behavior:'smooth'})})
+});
+</script>
+
+</body>
+</html>
